@@ -81,7 +81,7 @@
         });
     }
 
-    function buildHeader(file, previewContainer, clone) {
+    function buildHeader(file, previewContainer, clone, preview) {
 
         const header = document.createElement("div");
         header.classList.add("photo-preview-header");
@@ -92,6 +92,7 @@
         checkboxGroup.classList.add("form-check");
         checkboxGroup.classList.add("m-0");
         checkboxGroup.classList.add("ml-1");
+        checkboxGroup.classList.add("d-inline");
 
         // Random guid to link label to checkbox
         const guid = generateUUID();
@@ -123,7 +124,17 @@
         header.appendChild(checkboxGroup);
 
         // Bin icon
+        const bin = document.createElement("i");
+        header.appendChild(bin);
+        bin.classList.add("fas");
+        bin.classList.add("fa-trash");
+        bin.classList.add("float-right");
+        bin.classList.add("m-1");
+        bin.addEventListener("click", function () {
 
+            previewContainer.removeChild(preview);
+            updateFilesArray(previewContainer);
+        });
 
         return header;
     }
@@ -139,7 +150,7 @@
         });
 
         // Header
-        const header = buildHeader(file, previewContainer, clone);
+        const header = buildHeader(file, previewContainer, clone, preview);
 
         // Create image
         const image = document.createElement("img");
