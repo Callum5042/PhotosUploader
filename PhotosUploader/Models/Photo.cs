@@ -7,5 +7,9 @@
         public string Filename { get; set; }
 
         public byte[] Data { get; set; }
+
+        public bool? IsPrimary { get; set; }
+
+        public string Notes { get; set; }
     }
 }

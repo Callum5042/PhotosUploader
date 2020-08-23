@@ -7,6 +7,8 @@ namespace PhotosUploader.ViewModels.Photos
     {
         public IFormFile File { get; set; }
 
+        public bool IsPrimary { get; set; }
+
         public int Size { get; set; }
     }
 

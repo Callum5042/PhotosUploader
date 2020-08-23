@@ -1,7 +1,5 @@
 ﻿@model PhotosUploader.ViewModels.Photos.CreatePhotoModel
 
-<h1>Add Photos</h1>
-
 <form asp-controller="Photos" asp-action="Create" enctype="multipart/form-data">
 
     <div class="row">
@@ -13,6 +11,7 @@
             <div data-roveuploader>
 
                 <input name="Photos[0].File" type="file">
+                <input name="Photos[0].IsPrimary" data-photoupload-isprimary>
                 <input name="Photos[0].Size" data-photoupload-size>
 
             </div>
