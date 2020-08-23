@@ -73,3 +73,26 @@ body {
 .field-validation-error {
     color: red;
 }
+
+
+/* Photos CSS */
+.photo-preview-container {
+    width: 100%;
+    border-color: grey;
+    background-color: lightgray;
+    border: 1px solid;
+    border-radius: 5px;
+    min-height: 200px;
+    cursor: pointer;
+}
+
+.photo-preview {
+    width: fit-content;
+    margin: 1rem;
+    display: inline-block;
+}
+
+.photo-preview img {
+    width: 200px;
+    height: 200px;
+}

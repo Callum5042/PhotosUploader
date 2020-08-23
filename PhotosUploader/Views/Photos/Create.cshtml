@@ -6,17 +6,16 @@
 
     <div class="row">
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
 
-            <div class="custom-file">
-                <input asp-for="Files" class="custom-file-input">
-                <label asp-for="Files" class="custom-file-label">Choose file</label>
-            </div>
+            @*<label asp-for="Files">Choose file</label>*@
+            <input asp-for="Files" data-roveuploader>
 
         </div>
 
     </div>
 
-    <button type="submit" class="btn btn-primary">Add Photo</button>
+    <button type="submit" class="btn btn-primary">Update Photos</button>
+    <button type="button" class="btn btn-secondary">Upload Ajax</button>
 
 </form>

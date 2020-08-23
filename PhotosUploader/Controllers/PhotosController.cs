@@ -8,9 +8,9 @@ namespace PhotosUploader.Controllers
 {
     public class PhotosController : Controller
     {
-        public Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            throw new NotImplementedException();
+            return View();
         }
 
         public IActionResult Create()
