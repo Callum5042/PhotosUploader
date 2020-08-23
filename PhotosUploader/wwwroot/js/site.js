@@ -5,7 +5,7 @@
         console.log("Loaded");
 
         // Register file uploaders
-        const uploader = document.querySelectorAll("input[data-roveuploader]");
+        const uploader = document.querySelectorAll("[data-roveuploader]");
         for (let i = 0; i < uploader.length; ++i) {
             initFile(uploader[i]);
         }
@@ -43,19 +43,40 @@
 
         console.log("Photo uploaded");
 
+        // Enable for cloning
+        const inputInputs = input.querySelectorAll("input");
+        for (let i = 0; i < inputInputs.length; ++i) {
+            inputInputs[i].removeAttribute("disabled");
+        }
+
         // Clone file
-        const clone = input.cloneNode(false);
+        const clone = input.cloneNode(true);
         clone.setAttribute("hidden", "hidden");
-        input.parentElement.appendChild(clone);
+
+        // Disable to avoid posting the templates to the server
+        for (let i = 0; i < inputInputs.length; ++i) {
+            inputInputs[i].setAttribute("disabled", "disabled");
+        }
+
+        // Size
+        const sizeinput = clone.querySelector("input[data-photoupload-size]");
+        sizeinput.value = "123215";
 
         // Clone logic
-        clone.click();
-        clone.addEventListener("change", function () {
+        const fileinput = clone.querySelector("input[type='file']");
+        fileinput.click();
+        fileinput.addEventListener("change", function () {
 
             // Add preview to container
             for (let i = 0; i < this.files.length; ++i) {
 
-                buildPreview(this.files[i], previewContainer);
+                const preview = buildPreview(this.files[i], previewContainer, this);
+
+                // Add input values
+                preview.appendChild(clone);
+
+                // Update model binding array
+                updateFilesArray(previewContainer);
             }
         });
     }
@@ -73,6 +94,23 @@
         // Build
         preview.appendChild(image);
         previewContainer.appendChild(preview);
+
+        return preview;
+    }
+
+    // To ensure the model binding works correctly, must be contiguous from 0..x
+    function updateFilesArray(previewContainer) {
+
+        const expr = /^(\w+\[)(\d+)(\]\.\w+)$/g;
+        const previews = previewContainer.querySelectorAll(".photo-preview");
+        for (let i = 0; i < previews.length; ++i) {
+
+            const inputs = previews[i].querySelectorAll("input");
+            for (let j = 0; j < inputs.length; ++j) {
+
+                inputs[j].name = inputs[j].name.replace(expr, "$1" + i + "$3");
+            }
+        }
     }
 
 })();

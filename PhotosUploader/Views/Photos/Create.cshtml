@@ -8,8 +8,14 @@
 
         <div class="form-group col-md-12">
 
-            @*<label asp-for="Files">Choose file</label>*@
-            <input asp-for="Files" data-roveuploader>
+            @*<input asp-for="Files" data-roveuploader>*@
+
+            <div data-roveuploader>
+
+                <input name="Photos[0].File" type="file">
+                <input name="Photos[0].Size" data-photoupload-size>
+
+            </div>
 
         </div>
 
