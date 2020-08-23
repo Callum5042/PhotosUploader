@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace PhotosUploader.ViewModels.People
@@ -11,5 +12,7 @@ namespace PhotosUploader.ViewModels.People
         public string LastName { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
+
+        public IFormFileCollection Files { get; set; }
     }
 }

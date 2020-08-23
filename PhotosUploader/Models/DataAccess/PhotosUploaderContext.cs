@@ -8,6 +8,8 @@ namespace PhotosUploader.Models.DataAccess
 
         public virtual DbSet<Person> People { get; set; }
 
+        public virtual DbSet<Photo> Photos { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);

@@ -1,0 +1,22 @@
+﻿@model PhotosUploader.ViewModels.Photos.CreatePhotoModel
+
+<h1>Add Photos</h1>
+
+<form asp-controller="Photos" asp-action="Create" enctype="multipart/form-data">
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+
+            <div class="custom-file">
+                <input asp-for="Files" class="custom-file-input">
+                <label asp-for="Files" class="custom-file-label">Choose file</label>
+            </div>
+
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Photo</button>
+
+</form>

@@ -1,0 +1,33 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using PhotosUploader.Handlers.Photos;
+using PhotosUploader.ViewModels.Photos;
+using System;
+using System.Threading.Tasks;
+
+namespace PhotosUploader.Controllers
+{
+    public class PhotosController : Controller
+    {
+        public Task<IActionResult> Index()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromServices]CreatePhotoHandler handler, CreatePhotoModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            await handler.Handle(model);
+            return View();
+        }
+    }
+}

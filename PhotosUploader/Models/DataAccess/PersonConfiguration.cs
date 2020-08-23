@@ -7,9 +7,9 @@ namespace PhotosUploader.Models.DataAccess
     {
         public void Configure(EntityTypeBuilder<Person> builder)
         {
-            builder.ToTable("PERSON");
-            builder.HasKey(x => x.PersonId);
-            builder.Property(x => x.PersonId)
+            builder.ToTable("PEOPLE");
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id)
                 .HasColumnName("PERSON_ID");
             builder.Property(x => x.FirstName)
                 .HasColumnName("FIRST_NAME");

@@ -14,7 +14,7 @@ namespace PhotosUploader.Models
             FirstName = firstName;
         }
 
-        public int PersonId { get; protected set; }
+        public int Id { get; protected set; }
 
         public string FirstName { get; set; }
 
