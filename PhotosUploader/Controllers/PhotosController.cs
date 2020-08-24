@@ -26,7 +26,7 @@ namespace PhotosUploader.Controllers
                 return Json(false);
             }
 
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
             //await handler.Handle(model);
             return Json(true);
         }

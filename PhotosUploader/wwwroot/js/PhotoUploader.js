@@ -57,12 +57,17 @@ var PhotoUploader = /** @class */ (function () {
                         if (!(_i < _a.length)) return [3 /*break*/, 6];
                         key = _a[_i];
                         preview = this.previewContainer.querySelector(".photo-preview[data-photoupload-key='" + key + "']");
+                        console.log("WTF");
+                        overlay = preview.querySelector(".photo-preview-overlay");
+                        if (overlay) {
+                            preview.removeChild(overlay);
+                        }
                         overlay = document.createElement("div");
                         preview.appendChild(overlay);
                         overlay.classList.add("photo-preview-overlay");
                         msg = document.createElement("span");
                         overlay.appendChild(msg);
-                        msg.className = "fas fa-spinner fa-5x photo-preview-spinner";
+                        msg.className = "fas fa-spinner fa-spin fa-5x photo-preview-spinner";
                         formData = new FormData();
                         data = this._data_dictionary[key];
                         formData.append("Photo.Key", key);

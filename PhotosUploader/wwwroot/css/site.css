@@ -125,4 +125,5 @@ body {
 
     .photo-preview-overlay .photo-preview-spinner {
         color: ghostwhite;
+        background-color: transparent !important;
     }

@@ -18,15 +18,22 @@
 
             const preview = this.previewContainer.querySelector(".photo-preview[data-photoupload-key='" + key + "']");
 
+            console.log("WTF");
+
             // Add overlay
-            const overlay = document.createElement("div");
+            let overlay = preview.querySelector(".photo-preview-overlay");
+            if (overlay) {
+                preview.removeChild(overlay);
+            }
+
+            overlay = document.createElement("div");
             preview.appendChild(overlay);
             overlay.classList.add("photo-preview-overlay");
 
-            // Add spinner
+            // Add Icon
             const msg = document.createElement("span");
             overlay.appendChild(msg);
-            msg.className = "fas fa-spinner fa-5x photo-preview-spinner";
+            msg.className = "fas fa-spinner fa-spin fa-5x photo-preview-spinner";
 
             // Build data
             const formData = new FormData();
