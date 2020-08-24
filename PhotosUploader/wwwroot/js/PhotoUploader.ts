@@ -1,6 +1,7 @@
 ﻿class PhotoUploader {
 
     _data_dictionary = {}
+    previewContainer: HTMLElement
 
     constructor(input) {
 
@@ -14,6 +15,18 @@
     async send() {
 
         for (const key in this._data_dictionary) {
+
+            const preview = this.previewContainer.querySelector(".photo-preview[data-photoupload-key='" + key + "']");
+
+            // Add overlay
+            const overlay = document.createElement("div");
+            preview.appendChild(overlay);
+            overlay.classList.add("photo-preview-overlay");
+
+            // Add spinner
+            const msg = document.createElement("span");
+            overlay.appendChild(msg);
+            msg.className = "fas fa-spinner fa-5x photo-preview-spinner";
 
             // Build data
             const formData = new FormData();
@@ -34,15 +47,31 @@
 
                 const responseData = await response.json();
                 if (responseData) {
+
+                    // Remove data from key
+                    delete this._data_dictionary[key];
+
+                    // Success icon
+                    msg.className = "far fa-check-circle fa-5x text-success";
+
+                    // Call success
                     this.onSuccess();
                 }
                 else {
+
+                    // Error icon
+                    msg.className = "fas fa-exclamation-circle fa-5x text-danger";
+
+                    // Callback failure
                     this.OnFailure();
                 }
             }
             else {
 
-                console.log("Error: 500");
+                // Error icon
+                msg.className = "fas fa-exclamation-circle fa-5x text-danger";
+
+                // Callback failure
                 this.OnError();
             }
         }
@@ -57,11 +86,11 @@
         input.setAttribute("hidden", "hidden");
 
         // Preview area
-        const previewContainer = document.createElement("div");
-        input.parentElement.appendChild(previewContainer);
-        previewContainer.classList.add("photo-preview-container");
-        previewContainer.addEventListener("click", () => {
-            this.onClickAddPhoto(input, previewContainer);
+        this.previewContainer = document.createElement("div");
+        input.parentElement.appendChild(this.previewContainer);
+        this.previewContainer.classList.add("photo-preview-container");
+        this.previewContainer.addEventListener("click", () => {
+            this.onClickAddPhoto(input, this.previewContainer);
         });
 
         // Add dynamic button upload
@@ -73,7 +102,7 @@
 
         // Button click logic
         button.addEventListener("click", () => {
-            this.onClickAddPhoto(input, previewContainer);
+            this.onClickAddPhoto(input, this.previewContainer);
         });
     }
 
@@ -97,7 +126,7 @@
                 const key = this.generateUUID();
 
                 // Build preview
-                this.buildPreview(target.files[i], previewContainer, undefined, key);
+                this.buildPreview(target.files[i], this.previewContainer, undefined, key);
 
                 // Add data
                 this._data_dictionary[key] = {
@@ -123,7 +152,7 @@
         });
 
         // Header
-        const header = this.buildHeader(file, previewContainer, clone, preview, key);
+        const header = this.buildHeader(file, this.previewContainer, clone, preview, key);
 
         // Create image
         const image = document.createElement("img");
@@ -132,7 +161,7 @@
         // Build
         preview.appendChild(header);
         preview.appendChild(image);
-        previewContainer.appendChild(preview);
+        this.previewContainer.appendChild(preview);
 
         return preview;
     }
@@ -187,7 +216,7 @@
         bin.addEventListener("click", () => {
 
             delete this._data_dictionary[key];
-            previewContainer.removeChild(preview);
+            this.previewContainer.removeChild(preview);
         });
 
         return header;

@@ -91,6 +91,7 @@ body {
     margin: 1rem;
     display: inline-block;
     cursor: default;
+    position: relative;
 }
 
 .photo-preview-header {
@@ -101,3 +102,27 @@ body {
     width: 200px;
     height: 200px;
 }
+
+.photo-preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    text-align: center;
+}
+
+    .photo-preview-overlay span {
+        padding: 5px;
+        border-radius: 5px;
+        background-color: rgba(50, 50, 50, 0.5);
+        position: relative;
+        top: 33%;
+    }
+
+    .photo-preview-overlay .photo-preview-spinner {
+        color: ghostwhite;
+    }

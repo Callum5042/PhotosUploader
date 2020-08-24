@@ -44,7 +44,7 @@ var PhotoUploader = /** @class */ (function () {
     PhotoUploader.prototype.OnError = function () { };
     PhotoUploader.prototype.send = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, _b, _i, key, formData, data, url, response, responseData;
+            var _a, _b, _i, key, preview, overlay, msg, formData, data, url, response, responseData;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -56,6 +56,13 @@ var PhotoUploader = /** @class */ (function () {
                     case 1:
                         if (!(_i < _a.length)) return [3 /*break*/, 6];
                         key = _a[_i];
+                        preview = this.previewContainer.querySelector(".photo-preview[data-photoupload-key='" + key + "']");
+                        overlay = document.createElement("div");
+                        preview.appendChild(overlay);
+                        overlay.classList.add("photo-preview-overlay");
+                        msg = document.createElement("span");
+                        overlay.appendChild(msg);
+                        msg.className = "fas fa-spinner fa-5x photo-preview-spinner";
                         formData = new FormData();
                         data = this._data_dictionary[key];
                         formData.append("Photo.Key", key);
@@ -73,14 +80,24 @@ var PhotoUploader = /** @class */ (function () {
                     case 3:
                         responseData = _c.sent();
                         if (responseData) {
+                            // Remove data from key
+                            delete this._data_dictionary[key];
+                            // Success icon
+                            msg.className = "far fa-check-circle fa-5x text-success";
+                            // Call success
                             this.onSuccess();
                         }
                         else {
+                            // Error icon
+                            msg.className = "fas fa-exclamation-circle fa-5x text-danger";
+                            // Callback failure
                             this.OnFailure();
                         }
                         return [3 /*break*/, 5];
                     case 4:
-                        console.log("Error: 500");
+                        // Error icon
+                        msg.className = "fas fa-exclamation-circle fa-5x text-danger";
+                        // Callback failure
                         this.OnError();
                         _c.label = 5;
                     case 5:
@@ -98,11 +115,11 @@ var PhotoUploader = /** @class */ (function () {
         // Hide file
         input.setAttribute("hidden", "hidden");
         // Preview area
-        var previewContainer = document.createElement("div");
-        input.parentElement.appendChild(previewContainer);
-        previewContainer.classList.add("photo-preview-container");
-        previewContainer.addEventListener("click", function () {
-            _this.onClickAddPhoto(input, previewContainer);
+        this.previewContainer = document.createElement("div");
+        input.parentElement.appendChild(this.previewContainer);
+        this.previewContainer.classList.add("photo-preview-container");
+        this.previewContainer.addEventListener("click", function () {
+            _this.onClickAddPhoto(input, _this.previewContainer);
         });
         // Add dynamic button upload
         var button = document.createElement("button");
@@ -112,7 +129,7 @@ var PhotoUploader = /** @class */ (function () {
         button.classList.add("photo-add-button");
         // Button click logic
         button.addEventListener("click", function () {
-            _this.onClickAddPhoto(input, previewContainer);
+            _this.onClickAddPhoto(input, _this.previewContainer);
         });
     };
     PhotoUploader.prototype.onClickAddPhoto = function (input, previewContainer) {
@@ -130,7 +147,7 @@ var PhotoUploader = /** @class */ (function () {
             for (var i = 0; i < target.files.length; ++i) {
                 var key = _this.generateUUID();
                 // Build preview
-                _this.buildPreview(target.files[i], previewContainer, undefined, key);
+                _this.buildPreview(target.files[i], _this.previewContainer, undefined, key);
                 // Add data
                 _this._data_dictionary[key] = {
                     File: target.files[i],
@@ -149,14 +166,14 @@ var PhotoUploader = /** @class */ (function () {
             e.stopPropagation();
         });
         // Header
-        var header = this.buildHeader(file, previewContainer, clone, preview, key);
+        var header = this.buildHeader(file, this.previewContainer, clone, preview, key);
         // Create image
         var image = document.createElement("img");
         image.src = URL.createObjectURL(file);
         // Build
         preview.appendChild(header);
         preview.appendChild(image);
-        previewContainer.appendChild(preview);
+        this.previewContainer.appendChild(preview);
         return preview;
     };
     PhotoUploader.prototype.buildHeader = function (file, previewContainer, clone, preview, key) {
@@ -201,7 +218,7 @@ var PhotoUploader = /** @class */ (function () {
         bin.classList.add("m-1");
         bin.addEventListener("click", function () {
             delete _this._data_dictionary[key];
-            previewContainer.removeChild(preview);
+            _this.previewContainer.removeChild(preview);
         });
         return header;
     };
