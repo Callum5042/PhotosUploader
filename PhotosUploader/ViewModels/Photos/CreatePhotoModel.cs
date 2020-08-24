@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
 
 namespace PhotosUploader.ViewModels.Photos
 {
@@ -16,8 +15,6 @@ namespace PhotosUploader.ViewModels.Photos
 
     public class CreatePhotoModel
     {
-        public IEnumerable<AbstractPhoto> Photos { get; set; }
-
-        public string Test { get; set; }
+        public AbstractPhoto Photo { get; set; }
     }
 }

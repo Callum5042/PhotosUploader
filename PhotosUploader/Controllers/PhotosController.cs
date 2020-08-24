@@ -23,11 +23,12 @@ namespace PhotosUploader.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return Json(false);
             }
 
-            await handler.Handle(model);
-            return View();
+            //throw new NotImplementedException();
+            //await handler.Handle(model);
+            return Json(true);
         }
     }
 }

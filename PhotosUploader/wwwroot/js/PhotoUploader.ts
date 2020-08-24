@@ -7,35 +7,45 @@
         this.initFile(input);
     }
 
-    send() {
+    onSuccess() { }
+    OnFailure() { }
+    OnError() { }
 
-        // Build data
-        const formData = new FormData();
-        let i = 0;
+    async send() {
+
         for (const key in this._data_dictionary) {
 
-            if (this._data_dictionary.hasOwnProperty(key)) {
+            // Build data
+            const formData = new FormData();
+            const data = this._data_dictionary[key];
+            formData.append("Photo.Key", key);
+            formData.append("Photo.File", data.File);
+            formData.append("Photo.IsPrimary", "true");
 
-                const data = this._data_dictionary[key];
-                formData.append("Photos[" + i + "].Key", key);
-                formData.append("Photos[" + i + "].File", data.File);
-                formData.append("Photos[" + i + "].IsPrimary", "true");
+            // Submit
+            const url = "/Photos/Create";
 
-                i++;
+            const response = await fetch(url, {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+
+                const responseData = await response.json();
+                if (responseData) {
+                    this.onSuccess();
+                }
+                else {
+                    this.OnFailure();
+                }
+            }
+            else {
+
+                console.log("Error: 500");
+                this.OnError();
             }
         }
-
-        // Submit
-        const url = "/Photos/Create";
-
-        const xhttp = new XMLHttpRequest();
-        xhttp.addEventListener("load", function () {
-
-
-        });
-
-        xhttp.open("POST", url, true);
-        xhttp.send(formData);
     }
 
     // Transform <input type=file /> into the photo uploader container
@@ -87,7 +97,7 @@
                 const key = this.generateUUID();
 
                 // Build preview
-                const preview = this.buildPreview(target.files[i], previewContainer, undefined, key);
+                this.buildPreview(target.files[i], previewContainer, undefined, key);
 
                 // Add data
                 this._data_dictionary[key] = {
