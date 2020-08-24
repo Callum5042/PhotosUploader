@@ -43,27 +43,14 @@
 
         console.log("Photo uploaded");
 
-        // Enable for cloning
-        const inputInputs = input.querySelectorAll("input");
-        for (let i = 0; i < inputInputs.length; ++i) {
-            inputInputs[i].removeAttribute("disabled");
-        }
-
-        // Clone file
-        const clone = input.cloneNode(true);
-        clone.setAttribute("hidden", "hidden");
-
-        // Size
-        //const sizeinput = clone.querySelector("input[data-photoupload-size]");
-        //sizeinput.value = "123215";
-
-        // Clone logic
-        //const fileinput = clone.querySelector("input[type='file']");
+        // Click logic
         const fileinput = document.createElement("input");
+        document.querySelector("body").appendChild(fileinput);
         fileinput.type = "file";
         fileinput.setAttribute("multiple", "multiple");
+        fileinput.setAttribute("hidden", "hidden");
         fileinput.click();
-        fileinput.addEventListener("change", function () {
+        fileinput.addEventListener("input", function () {
 
             // Add preview to container
             for (let i = 0; i < this.files.length; ++i) {
@@ -75,19 +62,19 @@
                 }
 
                 // Reclone data, set multiple files to 1 file each
-                const clone1 = input.cloneNode(true);
-                clone1.setAttribute("hidden", "hidden");
-                const fileinput1 = clone.querySelector("input[type='file']");
+                const clone = input.cloneNode(true);
+                clone.setAttribute("hidden", "hidden");
+                const clone_fileinput = clone.querySelector("input[type='file']");
 
+                // Not supported by IE or safari
                 const list = new DataTransfer();
                 list.items.add(this.files[i]);
+                clone_fileinput.files = list.files;
 
-                fileinput1.files = list.files;
-
-                const preview = buildPreview(this.files[i], previewContainer, clone1);
+                const preview = buildPreview(this.files[i], previewContainer, clone);
 
                 // Add input values
-                preview.appendChild(clone1);
+                preview.appendChild(clone);
 
                 // Update model binding array
                 updateFilesArray(previewContainer);
@@ -98,11 +85,6 @@
                 }
             }
         });
-
-        // Disable to avoid posting the templates to the server
-        for (let i = 0; i < inputInputs.length; ++i) {
-            inputInputs[i].setAttribute("disabled", "disabled");
-        }
     }
 
     function buildHeader(file, previewContainer, clone, preview) {
