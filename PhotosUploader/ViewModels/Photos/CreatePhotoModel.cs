@@ -5,6 +5,8 @@ namespace PhotosUploader.ViewModels.Photos
 {
     public class AbstractPhoto
     {
+        public string Key { get; set; }
+
         public IFormFile File { get; set; }
 
         public bool IsPrimary { get; set; }
@@ -14,8 +16,8 @@ namespace PhotosUploader.ViewModels.Photos
 
     public class CreatePhotoModel
     {
-        public IFormFileCollection Files { get; set; }
-
         public IEnumerable<AbstractPhoto> Photos { get; set; }
+
+        public string Test { get; set; }
     }
 }
