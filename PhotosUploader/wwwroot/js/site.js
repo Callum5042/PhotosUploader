@@ -1,5 +1,7 @@
 ﻿(function () {
 
+    let photoUploader;
+
     document.addEventListener("DOMContentLoaded", function () {
 
         console.log("Loaded");
@@ -13,202 +15,164 @@
         // Register file uploaders
         const uploader = document.querySelectorAll("[data-roveuploader]");
         for (let i = 0; i < uploader.length; ++i) {
-            initFile(uploader[i]);
+
+            photoUploader = new PhotoUploader(uploader[i]);
         }
     });
 
     function onClickSubmitAjax(e) {
 
         console.log("Submit");
-
-        // Build data
-        let formData = new FormData();
-        let i = 0;
-        for (var key in _data_dictionary) {
-
-            if (_data_dictionary.hasOwnProperty(key)) {
-
-                const data = _data_dictionary[key];
-                formData.append("Photos[" + i + "].Key", key);
-                formData.append("Photos[" + i + "].File", data.File);
-                formData.append("Photos[" + i + "].IsPrimary", "true");
-
-                i++;
-            }
-        }
-
-        // Post data
-        const url = "/Photos/Create";
-        //fetch(url, {
-        //    method: "POST",
-        //    body: formData
-        //}).then(function (response) {
-        //    if (response.ok) {
-        //        return response.json();
-        //    }
-        //}).then(function (data) {
-
-        //    console.log("Success");
-        //});
-
-        var xhttp = new XMLHttpRequest();
-        xhttp.addEventListener("load", function () {
-
-
-        });
-
-        xhttp.open("POST", url, true);
-        xhttp.send(formData);
-        xhttp.send();
+        photoUploader.send();
     }
 
     ////////////////////////
     //////// Photos ////////
     ////////////////////////
 
-    let _data_dictionary = {};
+    //let _data_dictionary = {};
 
-    // Transform <input type=file /> into the photo uploader container
-    function initFile(input) {
+    //// Transform <input type=file /> into the photo uploader container
+    //function initFile(input) {
 
-        console.log("Init file");
+    //    console.log("Init file");
 
-        // Hide file
-        input.setAttribute("hidden", "hidden");
+    //    // Hide file
+    //    input.setAttribute("hidden", "hidden");
 
-        // Preview area
-        const previewContainer = document.createElement("div");
-        input.parentElement.appendChild(previewContainer);
-        previewContainer.classList.add("photo-preview-container");
-        previewContainer.addEventListener("click", function () {
-            onClickAddPhoto(input, previewContainer);
-        });
+    //    // Preview area
+    //    const previewContainer = document.createElement("div");
+    //    input.parentElement.appendChild(previewContainer);
+    //    previewContainer.classList.add("photo-preview-container");
+    //    previewContainer.addEventListener("click", function () {
+    //        onClickAddPhoto(input, previewContainer);
+    //    });
 
-        // Add dynamic button upload
-        const button = document.createElement("button");
-        input.parentElement.appendChild(button);
-        button.type = "button";
-        button.innerText = "Add";
-        button.classList.add("photo-add-button");
+    //    // Add dynamic button upload
+    //    const button = document.createElement("button");
+    //    input.parentElement.appendChild(button);
+    //    button.type = "button";
+    //    button.innerText = "Add";
+    //    button.classList.add("photo-add-button");
 
-        // Button click logic
-        button.addEventListener("click", function () {
-            onClickAddPhoto(input, previewContainer);
-        });
-    }
+    //    // Button click logic
+    //    button.addEventListener("click", function () {
+    //        onClickAddPhoto(input, previewContainer);
+    //    });
+    //}
 
-    function onClickAddPhoto(input, previewContainer) {
+    //function onClickAddPhoto(input, previewContainer) {
 
-        console.log("Photo uploaded");
+    //    console.log("Photo uploaded");
 
-        // Click logic
-        const file = document.createElement("input");
-        document.querySelector("body").appendChild(file);
-        file.type = "file";
-        file.setAttribute("multiple", "multiple");
-        file.click();
-        file.addEventListener("input", function () {
+    //    // Click logic
+    //    const file = document.createElement("input");
+    //    document.querySelector("body").appendChild(file);
+    //    file.type = "file";
+    //    file.setAttribute("multiple", "multiple");
+    //    file.click();
+    //    file.addEventListener("input", function () {
 
-            // Add preview to container
-            for (let i = 0; i < this.files.length; ++i) {
+    //        // Add preview to container
+    //        for (let i = 0; i < this.files.length; ++i) {
 
-                const key = generateUUID();
+    //            const key = generateUUID();
 
-                // Build preview
-                const preview = buildPreview(this.files[i], previewContainer, undefined, key);
+    //            // Build preview
+    //            const preview = buildPreview(this.files[i], previewContainer, undefined, key);
 
-                // Add data
-                _data_dictionary[key] = {
+    //            // Add data
+    //            _data_dictionary[key] = {
 
-                    File: this.files[i],
-                    isprimary: false
-                };
-            }
-        });
+    //                File: this.files[i],
+    //                isprimary: false
+    //            };
+    //        }
+    //    });
 
-        document.querySelector("body").removeChild(file);
-    }
+    //    document.querySelector("body").removeChild(file);
+    //}
 
-    function buildPreview(file, previewContainer, clone, key) {
+    //function buildPreview(file, previewContainer, clone, key) {
 
-        // Create preview
-        const preview = document.createElement("div");
-        preview.setAttribute("data-photoupload-key", key);
-        preview.classList.add("photo-preview");
+    //    // Create preview
+    //    const preview = document.createElement("div");
+    //    preview.setAttribute("data-photoupload-key", key);
+    //    preview.classList.add("photo-preview");
 
-        preview.addEventListener("click", function (e) {
-            e.stopPropagation();
-        });
+    //    preview.addEventListener("click", function (e) {
+    //        e.stopPropagation();
+    //    });
 
-        // Header
-        const header = buildHeader(file, previewContainer, clone, preview, key);
+    //    // Header
+    //    const header = buildHeader(file, previewContainer, clone, preview, key);
 
-        // Create image
-        const image = document.createElement("img");
-        image.src = URL.createObjectURL(file);
+    //    // Create image
+    //    const image = document.createElement("img");
+    //    image.src = URL.createObjectURL(file);
 
-        // Build
-        preview.appendChild(header);
-        preview.appendChild(image);
-        previewContainer.appendChild(preview);
+    //    // Build
+    //    preview.appendChild(header);
+    //    preview.appendChild(image);
+    //    previewContainer.appendChild(preview);
 
-        return preview;
-    }
+    //    return preview;
+    //}
 
-    function buildHeader(file, previewContainer, clone, preview, key) {
+    //function buildHeader(file, previewContainer, clone, preview, key) {
 
-        const header = document.createElement("div");
-        header.classList.add("photo-preview-header");
+    //    const header = document.createElement("div");
+    //    header.classList.add("photo-preview-header");
 
-        // Checkbox
-        const checkboxGroup = document.createElement("div");
-        checkboxGroup.classList.add("form-group");
-        checkboxGroup.classList.add("form-check");
-        checkboxGroup.classList.add("m-0");
-        checkboxGroup.classList.add("ml-1");
-        checkboxGroup.classList.add("d-inline");
+    //    // Checkbox
+    //    const checkboxGroup = document.createElement("div");
+    //    checkboxGroup.classList.add("form-group");
+    //    checkboxGroup.classList.add("form-check");
+    //    checkboxGroup.classList.add("m-0");
+    //    checkboxGroup.classList.add("ml-1");
+    //    checkboxGroup.classList.add("d-inline");
 
-        // Random guid to link label to checkbox
-        const guid = generateUUID();
+    //    // Random guid to link label to checkbox
+    //    const guid = generateUUID();
 
-        const label = document.createElement("label");
-        label.textContent = "Primary";
-        label.classList.add("form-check-label");
-        label.setAttribute("for", guid);
+    //    const label = document.createElement("label");
+    //    label.textContent = "Primary";
+    //    label.classList.add("form-check-label");
+    //    label.setAttribute("for", guid);
 
-        const checkbox = document.createElement("input");
-        checkbox.id = guid;
-        checkbox.type = "checkbox";
-        checkbox.classList.add("form-check-input");
-        checkbox.addEventListener("change", function () {
+    //    const checkbox = document.createElement("input");
+    //    checkbox.id = guid;
+    //    checkbox.type = "checkbox";
+    //    checkbox.classList.add("form-check-input");
+    //    checkbox.addEventListener("change", function () {
 
-            if (this.checked) {
-                _data_dictionary[key].isprimary = true;
-            }
-            else {
-                _data_dictionary[key].isprimary = false;
-            }
-        });
+    //        if (this.checked) {
+    //            _data_dictionary[key].isprimary = true;
+    //        }
+    //        else {
+    //            _data_dictionary[key].isprimary = false;
+    //        }
+    //    });
 
-        checkboxGroup.appendChild(checkbox);
-        checkboxGroup.appendChild(label);
-        header.appendChild(checkboxGroup);
+    //    checkboxGroup.appendChild(checkbox);
+    //    checkboxGroup.appendChild(label);
+    //    header.appendChild(checkboxGroup);
 
-        // Bin icon
-        const bin = document.createElement("i");
-        header.appendChild(bin);
-        bin.classList.add("fas");
-        bin.classList.add("fa-trash");
-        bin.classList.add("float-right");
-        bin.classList.add("m-1");
-        bin.addEventListener("click", function () {
+    //    // Bin icon
+    //    const bin = document.createElement("i");
+    //    header.appendChild(bin);
+    //    bin.classList.add("fas");
+    //    bin.classList.add("fa-trash");
+    //    bin.classList.add("float-right");
+    //    bin.classList.add("m-1");
+    //    bin.addEventListener("click", function () {
 
-            delete _data_dictionary[key];
-            previewContainer.removeChild(preview);
-        });
+    //        delete _data_dictionary[key];
+    //        previewContainer.removeChild(preview);
+    //    });
 
-        return header;
-    }
+    //    return header;
+    //}
 
     ////////////////////////
     ////// Old Photos //////
@@ -388,20 +352,20 @@
     //}
 
     // Public Domain/MIT
-    function generateUUID() {
-        var d = new Date().getTime();//Timestamp
-        var d2 = (performance && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16;//random number between 0 and 16
-            if (d > 0) {//Use timestamp until depleted
-                r = (d + r) % 16 | 0;
-                d = Math.floor(d / 16);
-            } else {//Use microseconds since page-load if supported
-                r = (d2 + r) % 16 | 0;
-                d2 = Math.floor(d2 / 16);
-            }
-            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-        });
-    }
+    //function generateUUID() {
+    //    var d = new Date().getTime();//Timestamp
+    //    var d2 = (performance && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+    //    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    //        var r = Math.random() * 16;//random number between 0 and 16
+    //        if (d > 0) {//Use timestamp until depleted
+    //            r = (d + r) % 16 | 0;
+    //            d = Math.floor(d / 16);
+    //        } else {//Use microseconds since page-load if supported
+    //            r = (d2 + r) % 16 | 0;
+    //            d2 = Math.floor(d2 / 16);
+    //        }
+    //        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    //    });
+    //}
 
 })();
