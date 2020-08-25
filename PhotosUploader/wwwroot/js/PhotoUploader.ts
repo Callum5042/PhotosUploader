@@ -1,9 +1,23 @@
-﻿class PhotoUploader {
+﻿interface Settings {
+    message?: string;
+    showBrowseButton?: boolean;
+    browseButtonText?: string;
+    browseButtonClass?: string;
+}
 
+class PhotoUploader {
+
+    settings: Settings;
     _data_dictionary = {}
     previewContainer: HTMLElement
 
-    constructor(input) {
+    constructor(input, settings?: Settings) {
+
+        this.settings = settings || {
+            showBrowseButton: true,
+            browseButtonText: "Browse",
+            browseButtonClass: "btn btn-primary mt-3"
+        };
 
         this.initFile(input);
     }
@@ -14,11 +28,11 @@
 
     async send() {
 
+        console.log(this.settings.message);
+
         for (const key in this._data_dictionary) {
 
             const preview = this.previewContainer.querySelector(".photo-preview[data-photoupload-key='" + key + "']");
-
-            console.log("WTF");
 
             // Add overlay
             let overlay = preview.querySelector(".photo-preview-overlay");
@@ -87,6 +101,7 @@
     // Transform <input type=file /> into the photo uploader container
     initFile(input) {
 
+        console.log(this.settings.message);
         console.log("Init file");
 
         // Hide file
@@ -101,16 +116,18 @@
         });
 
         // Add dynamic button upload
-        const button = document.createElement("button");
-        input.parentElement.appendChild(button);
-        button.type = "button";
-        button.innerText = "Add";
-        button.classList.add("photo-add-button");
+        if (this.settings.showBrowseButton) {
+            const button = document.createElement("button");
+            input.parentElement.appendChild(button);
+            button.type = "button";
+            button.innerText = this.settings.browseButtonText;
+            button.className = this.settings.browseButtonClass;
 
-        // Button click logic
-        button.addEventListener("click", () => {
-            this.onClickAddPhoto(input, this.previewContainer);
-        });
+            // Button click logic
+            button.addEventListener("click", () => {
+                this.onClickAddPhoto(input, this.previewContainer);
+            });
+        }
     }
 
     onClickAddPhoto(input, previewContainer) {

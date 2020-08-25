@@ -35,8 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var PhotoUploader = /** @class */ (function () {
-    function PhotoUploader(input) {
+    function PhotoUploader(input, settings) {
         this._data_dictionary = {};
+        this.settings = settings || {
+            showBrowseButton: true,
+            browseButtonText: "Browse",
+            browseButtonClass: "btn btn-primary mt-3"
+        };
         this.initFile(input);
     }
     PhotoUploader.prototype.onSuccess = function () { };
@@ -48,6 +53,7 @@ var PhotoUploader = /** @class */ (function () {
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
+                        console.log(this.settings.message);
                         _a = [];
                         for (_b in this._data_dictionary)
                             _a.push(_b);
@@ -57,7 +63,6 @@ var PhotoUploader = /** @class */ (function () {
                         if (!(_i < _a.length)) return [3 /*break*/, 6];
                         key = _a[_i];
                         preview = this.previewContainer.querySelector(".photo-preview[data-photoupload-key='" + key + "']");
-                        console.log("WTF");
                         overlay = preview.querySelector(".photo-preview-overlay");
                         if (overlay) {
                             preview.removeChild(overlay);
@@ -116,6 +121,7 @@ var PhotoUploader = /** @class */ (function () {
     // Transform <input type=file /> into the photo uploader container
     PhotoUploader.prototype.initFile = function (input) {
         var _this = this;
+        console.log(this.settings.message);
         console.log("Init file");
         // Hide file
         input.setAttribute("hidden", "hidden");
@@ -127,15 +133,17 @@ var PhotoUploader = /** @class */ (function () {
             _this.onClickAddPhoto(input, _this.previewContainer);
         });
         // Add dynamic button upload
-        var button = document.createElement("button");
-        input.parentElement.appendChild(button);
-        button.type = "button";
-        button.innerText = "Add";
-        button.classList.add("photo-add-button");
-        // Button click logic
-        button.addEventListener("click", function () {
-            _this.onClickAddPhoto(input, _this.previewContainer);
-        });
+        if (this.settings.showBrowseButton) {
+            var button = document.createElement("button");
+            input.parentElement.appendChild(button);
+            button.type = "button";
+            button.innerText = this.settings.browseButtonText;
+            button.className = this.settings.browseButtonClass;
+            // Button click logic
+            button.addEventListener("click", function () {
+                _this.onClickAddPhoto(input, _this.previewContainer);
+            });
+        }
     };
     PhotoUploader.prototype.onClickAddPhoto = function (input, previewContainer) {
         var _this = this;

@@ -13,8 +13,12 @@
         }
 
         // Register file uploaders
-        const uploader = document.querySelectorAll("[data-roveuploader]");
+        const uploader = document.querySelectorAll("[data-photouploader]");
         for (let i = 0; i < uploader.length; ++i) {
+
+            //photoUploader = new PhotoUploader(uploader[i], {
+            //    message: "Testto2"
+            //});
 
             photoUploader = new PhotoUploader(uploader[i]);
 
